@@ -63,7 +63,7 @@ func TestHealthChecks(t *testing.T) {
 			if c.secure {
 				consulClient := consulCluster.SetupConsulClient(t, true)
 
-				t.Log("creating intention")
+				logger.Log(t, "creating intention")
 				_, _, err := consulClient.Connect().IntentionCreate(&api.Intention{
 					SourceName:      staticClientName,
 					DestinationName: staticServerName,

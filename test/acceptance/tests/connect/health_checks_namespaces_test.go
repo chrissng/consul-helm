@@ -118,11 +118,11 @@ func TestHealthCheckNamespaces(t *testing.T) {
 					intention.SourceNS = c.DestinationNamespace
 					intention.DestinationNS = c.DestinationNamespace
 				}
-				t.Log("creating intention")
+				logger.Log(t, "creating intention")
 				_, _, err := consulClient.Connect().IntentionCreate(intention, nil)
 				require.NoError(t, err)
 			}
-			t.Log("checking that connection is successful")
+			logger.Log(t, "checking that connection is successful")
 			k8s.CheckStaticServerConnectionSuccessful(t, staticClientOpts, staticClientName, "http://localhost:1234")
 
 			// Now create the file so that the readiness probe of the static-server pod fails.
@@ -133,7 +133,7 @@ func TestHealthCheckNamespaces(t *testing.T) {
 			// We are expecting a "connection reset by peer" error because in a case of health checks,
 			// there will be no healthy proxy host to connect to. That's why we can't assert that we receive an empty reply
 			// from server, which is the case when a connection is unsuccessful due to intentions in other tests.
-			t.Log("checking that connection is unsuccessful")
+			logger.Log(t, "checking that connection is unsuccessful")
 			k8s.CheckStaticServerConnectionMultipleFailureMessages(
 				t,
 				staticClientOpts,
